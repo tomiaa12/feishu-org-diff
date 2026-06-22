@@ -1,0 +1,54 @@
+.app {
+  padding: 16px;
+  font-family: system-ui, sans-serif;
+}
+
+.title {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.primary-btn,
+.link-btn {
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.primary-btn {
+  padding: 8px 16px;
+  border: none;
+  background: #3370ff;
+  color: #fff;
+}
+
+.primary-btn:hover {
+  background: #245bdb;
+}
+
+.prompt {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff7e6;
+  border: 1px solid #ffd591;
+}
+
+.prompt p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.link-btn {
+  padding: 6px 12px;
+  border: 1px solid #3370ff;
+  background: #fff;
+  color: #3370ff;
+}
+
+.status {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #666;
+}
