@@ -3,14 +3,16 @@ import pkg from './package.json'
 
 export default defineManifest({
   manifest_version: 3,
-  name: pkg.name,
+  name: "飞书-谁跑路了",
   version: pkg.version,
   icons: {
-    48: 'public/logo.png',
+    16: 'public/16.png',
+    32: 'public/32.png',
+    48: 'public/48.png',
+    128: 'public/128.png',
   },
   permissions: [
     'sidePanel',
-    'contentSettings',
     'scripting',
     'tabs',
   ],

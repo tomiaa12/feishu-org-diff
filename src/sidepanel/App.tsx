@@ -31,7 +31,7 @@ type CollectMessage =
 
 interface DiffRow {
   name: string
-  change: '新增' | '减少'
+  change: '新来的' | '跑路了'
 }
 
 const defaultGridOptions: GridOptions = {
@@ -135,10 +135,10 @@ export default function App () {
     const compareNames = new Set(compareSnapshot.names)
     const added = baseSnapshot.names
       .filter(name => !compareNames.has(name))
-      .map(name => ({ name, change: '新增' as const }))
+      .map(name => ({ name, change: '新来的' as const }))
     const removed = compareSnapshot.names
       .filter(name => !baseNames.has(name))
-      .map(name => ({ name, change: '减少' as const }))
+      .map(name => ({ name, change: '跑路了' as const }))
 
     return [...added, ...removed]
   }, [baseSnapshot, compareSnapshot])
