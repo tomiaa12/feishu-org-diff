@@ -31,6 +31,7 @@ type CollectMessage =
 
 interface DiffRow {
   name: string
+  tag: string
   change: '新来的' | '跑路了'
 }
 
@@ -101,7 +102,8 @@ export default function App () {
 
   const diffColumnDefs = useMemo<ColDef<DiffRow>[]>(() => [
     { field: 'change', headerName: '变化', width: 92 },
-    { field: 'name', headerName: '姓名', minWidth: 160, flex: 1 },
+    { field: 'name', headerName: '姓名', minWidth: 120, flex: 1 },
+    { field: 'tag', headerName: '标签', width: 90 },
   ], [])
 
   const userGridOptions = useMemo<GridOptions<OrgUser>>(() => ({
@@ -131,22 +133,31 @@ export default function App () {
   const diffRows = useMemo<DiffRow[]>(() => {
     if (!baseSnapshot || !compareSnapshot) return []
 
+    const baseTagByName = new Map(
+      parseSnapshotUsers(baseSnapshot).map(user => [user.name, user.tag]),
+    )
+    const compareTagByName = new Map(
+      parseSnapshotUsers(compareSnapshot).map(user => [user.name, user.tag]),
+    )
     const baseNames = new Set(baseSnapshot.names)
     const compareNames = new Set(compareSnapshot.names)
     const added = baseSnapshot.names
       .filter(name => !compareNames.has(name))
-      .map(name => ({ name, change: '新来的' as const }))
+      .map(name => ({
+        name,
+        tag: baseTagByName.get(name) ?? '',
+        change: '新来的' as const,
+      }))
     const removed = compareSnapshot.names
       .filter(name => !baseNames.has(name))
-      .map(name => ({ name, change: '跑路了' as const }))
+      .map(name => ({
+        name,
+        tag: compareTagByName.get(name) ?? '',
+        change: '跑路了' as const,
+      }))
 
     return [...added, ...removed]
   }, [baseSnapshot, compareSnapshot])
-
-  const selectedSnapshotUsers = useMemo(
-    () => parseSnapshotUsers(baseSnapshot),
-    [baseSnapshot],
-  )
 
   const handleInject = async () => {
     setNeedOpenFeishu(false)
@@ -492,7 +503,7 @@ export default function App () {
         <section className="panel">
           <div className="compare-controls">
             <label>
-              <span>基准</span>
+              <span>当前</span>
               <select
                 value={baseSnapshotId ?? ''}
                 onChange={event => setBaseSnapshotId(Number(event.target.value))}
@@ -505,7 +516,7 @@ export default function App () {
               </select>
             </label>
             <label>
-              <span>对比</span>
+              <span>上次</span>
               <select
                 value={compareSnapshotId ?? ''}
                 onChange={event => setCompareSnapshotId(Number(event.target.value))}
@@ -520,8 +531,8 @@ export default function App () {
           </div>
 
           <div className="summary">
-            <span>基准 {baseSnapshot?.userCount ?? 0} 人</span>
-            <span>对比 {compareSnapshot?.userCount ?? 0} 人</span>
+            <span>当前 {baseSnapshot?.userCount ?? 0} 人</span>
+            <span>上次 {compareSnapshot?.userCount ?? 0} 人</span>
             <span>变化 {diffRows.length} 人</span>
           </div>
 
@@ -533,7 +544,7 @@ export default function App () {
             />
           </div>
 
-          <div className="panel-head history-head">
+          {/* <div className="panel-head history-head">
             <strong>基准快照用户</strong>
             <span>{selectedSnapshotUsers.length} 人</span>
           </div>
@@ -543,7 +554,7 @@ export default function App () {
               columnDefs={userColumnDefs}
               gridOptions={userGridOptions}
             />
-          </div>
+          </div> */}
         </section>
       )}
 

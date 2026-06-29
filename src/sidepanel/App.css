@@ -186,7 +186,7 @@
 }
 
 .diff-table {
-  height: 210px;
+  flex: 1;
 }
 
 .compare-controls {
